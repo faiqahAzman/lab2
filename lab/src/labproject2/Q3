@@ -1,0 +1,136 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package labviva2;
+
+import java.security.spec.NamedParameterSpec;
+import java.util.Scanner;
+
+/**
+ *
+ * @author user
+ */
+public class LabViva2 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        String s=InputString();
+        System.out.println("Input k:");
+        int k = scan.nextInt();
+        Process(s, k);
+    }
+
+    public static void Process(String s, int k) {
+        int blank = 0;
+        int counter = 0;
+        int[] change = new int[3];
+        char[] ch = s.toCharArray();
+        int length = s.length();
+        
+        for (int i = 0; i < length; i++) {
+            ch[i] = s.charAt(i);
+            if (ch[i] == '?') {
+                //save position of '?' and number of '?'
+                change[blank] = i;
+                blank++;
+            }
+        }
+        if (blank > 0) {
+            for (int w = 0; w < 10; w++) {
+                if (change[0] == 0 && w == 0) {
+                    continue;
+                }
+                ch[change[0]] = (char) (w + '0');
+                if (blank > 1) {
+                    for (int x = 0; x < 10; x++) {
+                        if (change[1] == 0 && x == 0) {
+                            continue;
+                        }
+                        ch[change[1]] = (char) (x + '0');
+                        if (blank > 2) {
+                            for (int y = 0; y < 10; y++) {
+                                if (change[2] == 0 && y == 0) {
+                                    continue;
+                                }
+                                ch[change[2]] = (char) (y + '0');
+                                counter = Count(ch, k, counter);
+                            }
+                        } else {
+                            counter = Count(ch, k, counter);
+                        }
+                    }
+                } else {
+                    counter = Count(ch, k, counter);
+                }
+            }
+        } else {
+            counter = Count(ch, k, counter);
+        }
+        System.out.println(s+" can be divided by "+ k + ", " + counter + " times");
+    }
+
+    public static int Count(char ch[], int k, int counter) {
+        String s2 = new String(ch);
+        int j = Integer.parseInt(s2);
+        
+        if (j % k == 0) {
+            counter++;
+        }
+        return counter;
+    }
+    public static String InputString() {
+        String s;
+        char l;
+        Scanner scan = new Scanner(System.in);
+        for (;;) {
+            System.out.println("Input s: ");
+            s = scan.nextLine();
+            int question = 0;
+            int length = s.length();
+            boolean invalid = false;
+            if (length > 8) {
+                System.out.println("Input too long");
+                continue;
+            }
+            OUTER:
+            for (int i = 0; i < length; i++) {
+                l = s.charAt(i);
+                switch (l) {
+                    case '?':
+                        //save position of '?' and number of '?'
+                        question++;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        invalid = false;
+                        break;
+                    default:
+                        invalid = true;
+                        break OUTER;
+                }
+            }
+            if (invalid) {
+                System.out.println("Invalid input");
+                continue;
+            }
+            if (question > 3) {
+                System.out.println("Too many ?");
+                continue;
+            }
+            break;
+        }
+        return s;
+    }
+}
+
